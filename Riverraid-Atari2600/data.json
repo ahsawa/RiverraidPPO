@@ -1,5 +1,17 @@
 {
   "info": {
+    "alive": {
+      "address": 248,
+      "type": "|u1"
+    },
+    "fire": {
+      "address": 251,
+      "type": "|u1"
+    },
+    "fuel": {
+      "address": 183,
+      "type": "|u1"
+    },
     "lives": {
       "address": 192,
       "type": "|u1"

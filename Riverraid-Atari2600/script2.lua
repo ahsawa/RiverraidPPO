@@ -34,5 +34,5 @@ function reward()
     dying = -5
   end 
 
-  return penalty*0 + fuel_reward*0.1 + score_reward + dying*0.2
+  return  score_reward 
 end
