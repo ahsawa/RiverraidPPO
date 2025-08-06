@@ -151,7 +151,7 @@ Note: The policy architecture used in training is fixed in the script as "CnnPol
 Example (execute from the RiverraidPPO folder, with the custom environment): 
 
 ```bash
-python mainstable.py --reward_select soft --curriculum_select 1 --total_timesteps 10000000
+python mainstable.py --reward_select soft --curriculum_select 0 --total_timesteps 10000000
 ```
 
 #### Evaluating Trained Models with mainevaluate.py
