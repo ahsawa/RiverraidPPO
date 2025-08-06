@@ -1,0 +1,178 @@
+"""
+Train an agent using Proximal Policy Optimization from Stable Baselines 3
+"""
+
+import argparse
+import os
+from datetime import datetime
+
+import gymnasium as gym
+import numpy as np
+from gymnasium.wrappers import TimeLimit
+from stable_baselines3 import PPO
+from stable_baselines3.common.atari_wrappers import ClipRewardEnv, WarpFrame
+from stable_baselines3.common.vec_env import (
+    SubprocVecEnv,
+    VecFrameStack,
+    VecTransposeImage,
+)
+from stable_baselines3.common.callbacks import EvalCallback, CheckpointCallback, CallbackList
+from stable_baselines3.common.logger import configure
+from stable_baselines3.common.monitor import Monitor
+
+from components import ScoreRewardEnv
+from components import StochasticFrameSkip
+from components import SoftRewardEnv
+
+
+import retro
+from typing import SupportsFloat
+import shutil
+
+import pdb
+
+
+
+def make_retro(*, game, state=None, max_episode_steps=20000, **kwargs):
+    if state is None:
+        state = retro.State.DEFAULT
+    env = retro.make(game, state, **kwargs)
+    env = StochasticFrameSkip(env, n=4, stickprob=0.25)
+    if max_episode_steps is not None:
+        env = TimeLimit(env, max_episode_steps=max_episode_steps)
+    return env
+
+
+def wrap_deepmind_retro(env, reward_select):
+    """
+    Configure environment for retro games, using config similar to DeepMind-style Atari in openai/baseline's wrap_deepmind
+    """
+    env = WarpFrame(env)
+
+    if reward_select == "clip": 
+        env = ClipRewardEnv(env)
+        print("Clip selected")
+    else: 
+        env = SoftRewardEnv(env)
+        print("Soft selected")
+    
+    return env
+
+
+def main():
+    
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument("--game", default="Riverraid-Atari2600")
+    parser.add_argument("--state", default=None)
+    parser.add_argument("--scenario", default="scenario")
+
+    parser.add_argument("--reward_select", default="soft")
+    parser.add_argument("--curriculum_select", default=0)
+
+    parser.add_argument("--total_timesteps", type=int, default=5000000)
+    parser.add_argument("--log_dir",   default="logs")
+    parser.add_argument("--save_freq", type=int, default=3125)
+
+
+    args = parser.parse_args()
+
+    print("Scenario:", args.scenario)
+
+    # Configurar state correctamente
+    state = args.state if args.state is not None else retro.State.DEFAULT
+
+    # Create directory
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    log_dir = os.path.join(args.log_dir, f"{args.game}_{timestamp}")
+    os.makedirs(log_dir, exist_ok=True)
+    
+    current_script_path = os.path.realpath(__file__)
+    shutil.copy(current_script_path, os.path.join(log_dir, "training_script_backup.txt"))
+
+    with open(os.path.join(log_dir, "args.txt"), "w") as f_txt:
+        for k, v in vars(args).items():
+            f_txt.write(f"{k}: {v}\n")
+
+    # Logging
+    new_logger = configure(log_dir, ["csv", "tensorboard", "stdout"])
+
+    
+    def make_env(state_name):
+        def _init():
+            env = make_retro(game=args.game, state=state_name, scenario=args.scenario)
+            env = wrap_deepmind_retro(env, args.reward_select)
+            env = Monitor(env)
+            return env
+        return _init
+
+
+    if int(args.curriculum_select) == 0: 
+        
+        make_envs = [make_env("Start")]*16
+
+        print("No curriculum learning")
+
+    else: 
+
+        make_envs = [make_env("Aisle"), make_env("Aisle2"), make_env("Aisle3"), make_env("Island"), make_env("Island2")]
+        start_envs = [make_env("Start")]*11
+
+        make_envs.extend(start_envs)
+
+        print("Curriculum learning")
+
+
+    venv = VecTransposeImage(VecFrameStack(SubprocVecEnv(make_envs), n_stack=4))
+    
+    
+    model = PPO(
+        policy="CnnPolicyImproved",
+        env=venv,
+        learning_rate=lambda f: f * 2.5e-4,
+        n_steps=128,
+        batch_size=256,
+        n_epochs=4,
+        gamma=0.99,
+        gae_lambda=0.95,
+        clip_range=0.15,
+        ent_coef=0.01,
+        verbose=1,
+    )
+
+    # Configuration of logger
+    model.set_logger(new_logger)
+
+
+    checkpoint_callback = CheckpointCallback(
+        save_freq=args.save_freq,
+        save_path=os.path.join(log_dir, "checkpoints"),
+        name_prefix="ppo_checkpoint"
+    )
+
+
+    callback_list = CallbackList([checkpoint_callback])
+
+
+    print(f"Initiating training for {args.game}")
+    print(f"Logs will be stored in: {log_dir}")
+    print(f"Total timesteps: {args.total_timesteps}")
+
+    model.learn(
+        total_timesteps=args.total_timesteps,
+        log_interval=1,
+        callback=callback_list,
+    )
+
+    # Save final model
+    final_model_path = os.path.join(log_dir, "final_model")
+    model.save(final_model_path)
+    print(f"Final model saved in: {final_model_path}")
+
+    # Close environment
+    venv.close()
+
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,8 @@
+game: Riverraid-Atari2600
+state: None
+scenario: scenario2
+reward_select: clip
+curriculum_select: 0
+total_timesteps: 10000000
+log_dir: logs
+save_freq: 3125

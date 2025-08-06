@@ -1,0 +1,11 @@
+game: Riverraid-Atari2600
+state: None
+scenario: scenario
+reward_select: soft
+curriculum_select: 0
+total_timesteps: 5000000
+log_dir: logs
+save_freq: 3125
+seed: 10
+lr: 0.0001
+clip: 0.2
