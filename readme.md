@@ -194,8 +194,7 @@ This tool helps you inspect the neural network architecture used by a trained po
 
 Below is a sample video (evaluation_video.mp4) that helps visualize and analyze the agent’s performance during evaluation. The next video shown corresponds to the model discussed in the report and represents its final behavior after training.
 
-
-[https://github.com/user-attachments/assets/316c0481-0c26-4e4b-8e7d-8e6ddf98f8bb](https://private-user-images.githubusercontent.com/27706551/475065119-316c0481-0c26-4e4b-8e7d-8e6ddf98f8bb.webm?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NTQ0OTM5MTAsIm5iZiI6MTc1NDQ5MzYxMCwicGF0aCI6Ii8yNzcwNjU1MS80NzUwNjUxMTktMzE2YzA0ODEtMGMyNi00ZTRiLThlN2QtOGU2ZGRmOThmOGJiLndlYm0_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjUwODA2JTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI1MDgwNlQxNTIwMTBaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT1lMDU4Mjk2N2RkZWFkMTFlYTQ5YzkwZGI2MGQxMTg1M2FiYzVlMjc2NTYwOGMwMDJiOThhOTg0ODkzODg3OWQzJlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCJ9.b51M0kd2S6lIS3mOEnq_FYSnW3P8at5ZUtTLBDcSz5s)
+https://github.com/user-attachments/assets/de0b688c-3dee-4271-82ce-90f92032a3e5
 
 ### Other logs
 
