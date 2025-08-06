@@ -154,7 +154,7 @@ Example (execute from the RiverraidPPO folder, with the custom environment):
 python mainstable.py --reward_select soft --curriculum_select 1 --total_timesteps 10000000
 ```
 
-#### Evaluating Trained Models with mainevaluate.py
+#### Evaluating Trained Models with mainevaluate.py
 
 The mainevaluate.py script is used to evaluate trained PPO models saved during training. It automatically finds all saved checkpoints, including the final and best models, inside a given experiment’s logs directory. For each model, it runs multiple evaluation episodes (default 10) in a parallelized environment and calculates the mean score and standard deviation. The script generates a detailed text report, a plot of the scores over training steps, and saves raw evaluation results for further analysis. To run it, provide the path to the logs folder using the --log_dir argument.
 
@@ -168,7 +168,7 @@ The mainevaluate.py script is used to evaluate trained PPO models saved during t
 The script `run_evaluate.sh` is used to run `mainevaluate.py` over all the cases inside a directory. 
 
 
-#### Generating performance metrics with mainstats.py
+#### Generating performance metrics with mainstats.py
 
 
 After running the training experiments with mainstable.py, it is recommended to run mainstats.py. This script processes each experiment folder inside the logs directory, reads the evaluation .npy files, and calculates statistics such as mean scores, standard deviations, efficiency (mean score per timestep), and a normalized area under the curve (AUC) to measure robustness. It then saves these summary statistics as text files within each evaluation folder. These statistics are used to evaluate each case in this project. 
@@ -177,7 +177,7 @@ After running the training experiments with mainstable.py, it is recommended to 
 
 To create a plot from the test cases, run the script mainplotting.py. This script gathers evaluation results from all experiment runs stored in the `logs` folder and combines them into a single plot. It displays the mean values with error bars for each case. The final combined plot is saved as a PDF file in the `output` directory. To visually review your training results, simply run this script and check the generated plots inside the `output` folder.
 
-### Utility Scripts (utils/)
+### Utility Scripts (utils/)
 
 This folder contains additional helper scripts that support training and evaluation. Two of the most relevant ones are:
 
@@ -190,26 +190,26 @@ This script generates a video of a trained agent playing the game. It loads a se
 
 This tool helps you inspect the neural network architecture used by a trained policy. It prints out the model layers, number of parameters, and structure, which is helpful for debugging or understanding how your custom policy (e.g. CnnPolicyImproved) is built.
 
-## Results
+## Results
 
 Below is a sample video (evaluation_video.mp4) that helps visualize and analyze the agent’s performance during evaluation. The next video shown corresponds to the model discussed in the report and represents its final behavior after training.
 
 
 [https://github.com/user-attachments/assets/316c0481-0c26-4e4b-8e7d-8e6ddf98f8bb](https://private-user-images.githubusercontent.com/27706551/475065119-316c0481-0c26-4e4b-8e7d-8e6ddf98f8bb.webm?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NTQ0OTM5MTAsIm5iZiI6MTc1NDQ5MzYxMCwicGF0aCI6Ii8yNzcwNjU1MS80NzUwNjUxMTktMzE2YzA0ODEtMGMyNi00ZTRiLThlN2QtOGU2ZGRmOThmOGJiLndlYm0_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjUwODA2JTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI1MDgwNlQxNTIwMTBaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT1lMDU4Mjk2N2RkZWFkMTFlYTQ5YzkwZGI2MGQxMTg1M2FiYzVlMjc2NTYwOGMwMDJiOThhOTg0ODkzODg3OWQzJlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCJ9.b51M0kd2S6lIS3mOEnq_FYSnW3P8at5ZUtTLBDcSz5s)
 
-### Other logs
+### Other logs
 
 RiverraidPPO contains three main folders that group results from different experiment batches:
 
-#### logs_10M/
+#### logs_10M/
 
 Contains the results of the initial exploration phase, where each model was trained for 10 million timesteps. These experiments were launched automatically using the `run_10M.sh` script to avoid running them manually.
 
-#### logs_params/
+#### logs_params/
 
 Stores results from experiments focused on testing different network architectures.
 
-#### logs_hyper/
+#### logs_hyper/
 
 Includes results related to hyperparameter tuning and their effect on training performance.
 
